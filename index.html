@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Workout Tracker</title>
+		<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
+		<script src="https://get.mavo.io/mavo.es5.js"></script>
+		<style>
+			:not(:focus-within) input[type="number"]::-webkit-outer-spin-button, 
+      :not(:focus-within) input[type="number"]::-webkit-inner-spin-button {
+					appearance: none;
+			}
+			.note-false::after, .note-true::after {
+					content: '📝'
+			}
+			.note-false::after {
+					color: grey;
+					filter: grayscale(100%);
+			}
+			.status-todo::after {
+					content: '🔲'
+			}
+			.status-done::after {
+					content: '✔️'
+			}
+			.status-increase::after {
+					content: '▲'
+			}
+			.status-decrease::after {
+					content: '▼'
+			}
+			[mv-list="exercise"], [mv-list="group"] {
+					padding-left: 2em;
+			}
+			h4 {
+					margin-bottom: .5ex
+			}
+			[mv-list="group"] > [mv-list-item] {
+					box-sizing: border-box;
+					max-width: 60ex;
+					display: grid;
+					justify-items: right;
+					grid-template-columns: 1fr 2em 2ex 3em 2ex 3em 3em 3em
+			}
+			[property="notes"] {
+					grid-column-start: 2;
+					grid-column-end: 7;
+			}
+			[property="subtitle"] {
+					justify-self: left;
+			}
+		</style>
+	</head>
+	<body mv-app="tracker" mv-storage="local" mv-autosave="1">
+		<div style="[if(url('debug')!=1,'display: none','')]">
+			<input id="datepicker" type="date">
+			<input id="countpicker" type="number">
+			<input id="weightpicker" type="number" step="5">
+			<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
+			</div>
+		</div>
+		<h2>Workout</h2>
+		<section>
+			<h3>Timer</h3>
+			<span style="display:none">
+				<meta property="start">
+				<meta property="running">
+			</span>
+ 			<span property="duration" mv-default="30"></span>s
+			<button mv-action="set(start, 1*$now)">start
+			</button>
+			<span mv-if="remaining>0">[round(remaining/1000)]</span>
+			<meta property="remaining" mv-value="start+duration*1000-$now">
+		</section>
+		<section mv-list="session" mv-order="desc">
+			<div mv-list-item>
+				<h3><span property="title"></span>
+					<span property="date" mv-editor="#datepicker"
+								mv-default="[$today]"></span>
+					<button mv-action="add($item, session, $index), set(statusIndex,0), set(date, $today), move($item,0)">🔁</button>
+					<button mv-action="delete($item)">X</button>
+				</h3>
+				<div mv-list="exercise">
+					<div mv-list-item>
+						<h4 property="title" mv-editor-placeholder="Exercise"></h4>
+						<div mv-list="group" mv-initial-items="1">
+							<div mv-list-item>
+								<span property="subtitle" mv-mode="read"></span>
+								<span property="sets" mv-editor-type="number" mv-mode="edit"></span>
+								x
+								<span property="reps" mv-editor-type="number"  mv-mode="edit"></span>
+								@
+								<span property="weight" mv-editor-type="number"  mv-mode="edit"
+											mv-editor-step="5"></span>
+								<label>
+									<span class="status-[status]"></span>
+									<meta mv-mode="read" property="statusIndex" mv-default="0">
+									<meta mv-mode="read" property="status" mv-value="get(statusList,statusIndex)">
+									<button style="display:none" mv-action="set(statusIndex,(1+statusIndex) mod count(statusList))"></button>
+								</label>
+								<label>
+									<span class="note-[note]"></span>
+									<input type="checkbox" style="display:none" property="note"></input>
+								</label>
+								<div mv-if="note" property="notes" mv-mode="edit"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>
