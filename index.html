@@ -10,6 +10,9 @@
 			section {
 					max-width: 70ex;
 			}
+			.timer {
+					position: sticky;
+			}
 			.title {
 					display: grid;
 					column-gap: 2em;
@@ -67,8 +70,8 @@
 			<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
 			</div>
 		</div>
-		<h2>Workout</h2>
-		<section>
+		<h2 property="heading" mv-default="Workout"></h2>
+		<section class="timer">
 			<h3>Timer</h3>
 			<span style="display:none">
 				<meta property="start">
@@ -93,7 +96,7 @@
 						<h4 property="title" mv-editor-placeholder="Exercise"></h4>
 						<div mv-list="group" mv-initial-items="1">
 							<div mv-list-item>
-								<span property="subtitle" mv-mode="read"></span>
+								<span><span property="subtitle"></span></span>
 								<span property="sets" mv-editor-type="number" mv-mode="edit"></span>
 								x
 								<span property="reps" mv-editor-type="number"  mv-mode="edit"></span>
