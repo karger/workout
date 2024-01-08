@@ -7,6 +7,14 @@
 		<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
 		<script src="https://get.mavo.io/mavo.es5.js"></script>
 		<style>
+			section {
+					max-width: 70ex;
+			}
+			.title {
+					display: grid;
+					column-gap: 2em;
+					grid-template-columns: 3fr 3fr 1fr 1fr
+			}
 			:not(:focus-within) input[type="number"]::-webkit-outer-spin-button, 
       :not(:focus-within) input[type="number"]::-webkit-inner-spin-button {
 					appearance: none;
@@ -38,7 +46,6 @@
 			}
 			[mv-list="group"] > [mv-list-item] {
 					box-sizing: border-box;
-					max-width: 60ex;
 					display: grid;
 					justify-items: right;
 					grid-template-columns: 1fr 2em 2ex 3em 2ex 3em 3em 3em
@@ -75,11 +82,11 @@
 		</section>
 		<section mv-list="session" mv-order="desc">
 			<div mv-list-item>
-				<h3><span property="title"></span>
+				<h3 class="title"><span property="title"></span>
 					<span property="date" mv-editor="#datepicker"
 								mv-default="[$today]"></span>
-					<button mv-action="add($item, session, $index), set(statusIndex,0), set(date, $today), move($item,0)">🔁</button>
 					<button mv-action="delete($item)">X</button>
+					<button mv-action="add($item, session, $index), set(statusIndex,0), set(date, $today), move($item,0)">🔁</button>
 				</h3>
 				<div mv-list="exercise">
 					<div mv-list-item>
