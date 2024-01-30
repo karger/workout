@@ -6,7 +6,7 @@
 		<title>Workout Tracker</title>
 		<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
 		<script src="https://get.mavo.io/mavo.es5.js"></script>
-		<script src="https://firebase-plugin.netlify.app/src/mavo-firebase-firestore.js"></script>
+		<script src="workout.js"></script>
 		<style>
 			section {
 					max-width: 90ex;
@@ -74,8 +74,9 @@
 			}
 		</style>
 	</head>
-	<body mv-app="workout" mv-plugins="firebase-firestore"
-				mv-autosave="1"
+	<body
+		<section mv-app="workout" mv-plugins="firebase-firestore"
+				mv-autosave="5"
 				mv-storage="firebase://mavo-cd7c3/workout/ctyjq9eaVNXIgQxlENIVMHNt0fs1"
 				mv-storage-options="auth"
 				mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
@@ -87,7 +88,7 @@
 			<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
 			</div>
 		</div>
-		<h2 property="heading" mv-default="Workout"></h2>
+		<h2 property="heading" mv-default="[$user.name]'s Workout"></h2>
 		<section id="picker">
 			<select property="newest" mv-storage="none">
 				<option selected value="">(choose session)</option>
@@ -97,7 +98,7 @@
 			</select>
 			<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)">Add</button>
 		</section>
-		<section class="timer">
+		<section class="timer" style="position:sticky; top:0">
 			<h3>Timer</h3>
 			<span style="display:none">
 				<meta property="start">
@@ -148,5 +149,6 @@
 				</div>
 			</div>
 		</section>
-	</body>
+		</section>
+</body>
 </html>
