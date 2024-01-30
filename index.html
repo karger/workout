@@ -11,13 +11,26 @@
 			section {
 					max-width: 90ex;
 			}
+			#spacer {
+					position: fixed;
+					top: 0;
+					height: 3rem;
+					width: 100%;
+					background-color: white;
+					z-index: 1;
+			}
 			.timer {
 					position: sticky;
+					top: calc(1.5rem + 1.5em);
+					z-index: 2;
+					padding-top: .5em;
+					padding-bottom: 1em;
+					background-color: white;
 			}
 			.title {
 					display: grid;
 					column-gap: 2em;
-					grid-template-columns: 3fr 3fr 1fr 1fr
+					grid-template-columns: 3fr 3fr 1fr 1fr;
 			}
 			.hide-if-true {
 					display: none;
@@ -75,6 +88,7 @@
 		</style>
 	</head>
 	<body>
+		<div id="spacer"></div>
 		<section mv-app="config"
 						 mv-bar="none"
 						 mv-plugins="firebase-firestore"
@@ -108,8 +122,8 @@
 				</select>
 				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)">Add</button>
 			</section>
-			<section class="timer" style="position:sticky; top:0">
-				<h3>Timer</h3>
+			<section class="timer">
+				<b>Timer:</b>
 				<span style="display:none">
 					<meta property="start">
 					<meta property="remaining" mv-value="start+duration*1000-$now">
