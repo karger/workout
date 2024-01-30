@@ -86,79 +86,79 @@
 			<meta property="storage" mv-value="if(uid,'firebase://mavo-cd7c3/workout/' & uid,'none')">
 		</section>
 		<section mv-app="workout" mv-plugins="firebase-firestore"
-				mv-autosave="5"
-				mv-storage="[config.storage]"
-				mv-storage-options="auth"
-				mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
-				>
-		<div class="hide-if-[url('debug')!=1]">
-			<input id="datepicker" type="date">
-			<input id="countpicker" type="number">
-			<input id="weightpicker" type="number" step="5">
-			<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
+						 mv-autosave="5"
+						 mv-storage="[config.storage]"
+						 mv-storage-options="auth"
+						 mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
+						 >
+			<div class="hide-if-[url('debug')!=1]">
+				<input id="datepicker" type="date">
+				<input id="countpicker" type="number">
+				<input id="weightpicker" type="number" step="5">
+				<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
+				</div>
 			</div>
-		</div>
-		<h2 property="heading" mv-default="[$user.name]'s Workout"></h2>
-		<section id="picker">
-			<select property="newest" mv-storage="none">
-				<option selected value="">(choose session)</option>
-				<optgroup mv-list mv-value="unique(session.title)">
-					<option mv-list-item></option>
-				</optgroup>
-			</select>
-			<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)">Add</button>
-		</section>
-		<section class="timer" style="position:sticky; top:0">
-			<h3>Timer</h3>
-			<span style="display:none">
-				<meta property="start">
-				<meta property="remaining" mv-value="start+duration*1000-$now">
-				<meta property="running" mv-value="remaining > 0">
-			</span>
- 			<span property="duration" mv-default="30"></span>s
-			<button mv-if="not(running)" mv-action="set(start, 1*$now)">start</button>
-			<button mv-if="running" mv-action="set(start, 1*$now-duration*1000)">stop</button>
-			<span mv-if="running">[round(remaining/1000)]</span>
-		</section>
-		<section mv-list="session" mv-order="desc">
-			<div mv-list-item>
-				<h3 class="title"><span property="title"></span>
-					<span property="date" mv-editor="#datepicker"
-								mv-default="[$today]"></span>
-					<span></span>
-					<button mv-action="delete($item)">X</button>
+			<h2 property="heading" mv-default="[$user.name]'s Workout"></h2>
+			<section id="picker">
+				<select property="newest" mv-storage="none">
+					<option selected value="">(choose session)</option>
+					<optgroup mv-list mv-value="unique(session.title)">
+						<option mv-list-item></option>
+					</optgroup>
+				</select>
+				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)">Add</button>
+			</section>
+			<section class="timer" style="position:sticky; top:0">
+				<h3>Timer</h3>
+				<span style="display:none">
+					<meta property="start">
+					<meta property="remaining" mv-value="start+duration*1000-$now">
+					<meta property="running" mv-value="remaining > 0">
+				</span>
+ 				<span property="duration" mv-default="30"></span>s
+				<button mv-if="not(running)" mv-action="set(start, 1*$now)">start</button>
+				<button mv-if="running" mv-action="set(start, 1*$now-duration*1000)">stop</button>
+				<span mv-if="running">[round(remaining/1000)]</span>
+			</section>
+			<section mv-list="session" mv-order="desc">
+				<div mv-list-item>
+					<h3 class="title"><span property="title"></span>
+						<span property="date" mv-editor="#datepicker"
+									mv-default="[$today]"></span>
+						<span></span>
+						<button mv-action="delete($item)">X</button>
 
-					<!--<button mv-action="add($item, session, $index), set(statusIndex,0), set(date, $today), move($item,0)">⟳</button>-->
-				</h3>
-				<div mv-list="exercise">
-					<div mv-list-item>
-						<h4 property="title" mv-editor-placeholder="Exercise"></h4>
-						<div mv-list="group" mv-initial-items="1">
-							<div mv-list-item>
-								<span><span property="subtitle"></span></span>
-								<span property="sets" mv-editor-type="number" mv-mode="edit"></span>
-								x
-								<span property="reps" mv-editor-type="number"  mv-mode="edit"></span>
-								@
-								<span property="weight" mv-editor-type="number"  mv-mode="edit"
-											mv-editor-step="5"></span>
-								<label>
-									<span class="status-[status]"></span>
-									<meta mv-mode="read" property="statusIndex" mv-default="0">
-									<meta mv-mode="read" property="status" mv-value="get(statusList,statusIndex)">
-									<button style="display:none" mv-action="set(statusIndex,(1+statusIndex) mod count(statusList))"></button>
-								</label>
-								<label>
-									<span class="note-[note]"></span>
-									<input type="checkbox" style="display:none" property="note"></input>
-								</label>
-								<div mv-if="note" property="notes" mv-mode="edit"></div>
+						<!--<button mv-action="add($item, session, $index), set(statusIndex,0), set(date, $today), move($item,0)">⟳</button>-->
+					</h3>
+					<div mv-list="exercise">
+						<div mv-list-item>
+							<h4 property="title" mv-editor-placeholder="Exercise"></h4>
+							<div mv-list="group" mv-initial-items="1">
+								<div mv-list-item>
+									<span><span property="subtitle"></span></span>
+									<span property="sets" mv-editor-type="number" mv-mode="edit"></span>
+									x
+									<span property="reps" mv-editor-type="number"  mv-mode="edit"></span>
+									@
+									<span property="weight" mv-editor-type="number"  mv-mode="edit"
+												mv-editor-step="5"></span>
+									<label>
+										<span class="status-[status]"></span>
+										<meta mv-mode="read" property="statusIndex" mv-default="0">
+										<meta mv-mode="read" property="status" mv-value="get(statusList,statusIndex)">
+										<button style="display:none" mv-action="set(statusIndex,(1+statusIndex) mod count(statusList))"></button>
+									</label>
+									<label>
+										<span class="note-[note]"></span>
+										<input type="checkbox" style="display:none" property="note"></input>
+									</label>
+									<div mv-if="note" property="notes" mv-mode="edit"></div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 		</section>
-		</section>
-</body>
+	</body>
 </html>
