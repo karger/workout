@@ -74,10 +74,20 @@
 			}
 		</style>
 	</head>
-	<body
+	<body>
+		<section mv-app="config"
+						 mv-bar="none"
+						 mv-plugins="firebase-firestore"
+						 mv-source="firebase://mavo-cd7c3/workout/0"
+						 mv-source-options="auth"
+						 mv-source-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
+						 >
+			<meta property="uid" mv-value="url('uid') || $user.info.uid">
+			<meta property="storage" mv-value="if(uid,'firebase://mavo-cd7c3/workout/' & uid,'none')">
+		</section>
 		<section mv-app="workout" mv-plugins="firebase-firestore"
 				mv-autosave="5"
-				mv-storage="firebase://mavo-cd7c3/workout/ctyjq9eaVNXIgQxlENIVMHNt0fs1"
+				mv-storage="[config.storage]"
 				mv-storage-options="auth"
 				mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
 				>
