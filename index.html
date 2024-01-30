@@ -8,8 +8,16 @@
 		<script src="https://get.mavo.io/mavo.es5.js"></script>
 		<script src="workout.js"></script>
 		<style>
+			.share {
+					width: .8em;
+					vertical-align: middle;
+			}
 			section {
 					max-width: 90ex;
+			}
+			[mv-list="session"] > [mv-list-item]:not(:last-child) {
+			padding-bottom: 5em;
+			border-bottom: 3px solid black;
 			}
 			#spacer {
 					position: fixed;
@@ -78,7 +86,7 @@
 					box-sizing: border-box;
 					display: grid;
 					justify-items: end;
-					column-gap: 1ex;
+					column-gap: 1em;
 					grid-template-columns: 1fr 2em 2ex 3em 2ex 3em 3em 3em
 			}
 			[property="notes"] {
@@ -91,7 +99,7 @@
 		<div id="spacer"></div>
 		<section mv-app="config"
 						 mv-bar="none"
-						 mv-plugins="firebase-firestore"
+						 mv-plugins="firebase-firestore share"
 						 mv-source="firebase://mavo-cd7c3/workout/0"
 						 mv-source-options="auth"
 						 mv-source-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
@@ -112,8 +120,8 @@
 				<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
 				</div>
 			</div>
-			<h2 property="heading" mv-default="[$user.name]'s Workout"></h2>
-			<section id="picker">
+			<h2 property="heading" mv-default="[$user.name]'s Workout" mv-storage="inherit"></h2>
+			<section id="picker"  class="hide-if-[uid != $user.info.uid]">
 				<select property="newest" mv-storage="none">
 					<option selected value="">(choose session)</option>
 					<optgroup mv-list mv-value="unique(session.title)">
@@ -122,7 +130,7 @@
 				</select>
 				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)">Add</button>
 			</section>
-			<section class="timer">
+			<section class="timer hide-if-[uid != $user.info.uid]">
 				<b>Timer:</b>
 				<span style="display:none">
 					<meta property="start">
@@ -140,7 +148,8 @@
 						<span property="date" mv-editor="#datepicker"
 									mv-default="[$today]"></span>
 						<span></span>
-						<button mv-action="delete($item)">X</button>
+						<meta property="edit" mv-value="$today < date+1000*60*60*24">
+						<button mv-if="$index=0" mv-action="delete($item)">X</button>
 
 						<!--<button mv-action="add($item, session, $index), set(statusIndex,0), set(date, $today), move($item,0)">⟳</button>-->
 					</h3>
@@ -150,12 +159,18 @@
 							<div mv-list="group" mv-initial-items="1">
 								<div mv-list-item>
 									<span><span property="subtitle"></span></span>
-									<span property="sets" mv-editor-type="number" mv-mode="edit"></span>
+									<span property="sets" mv-editor-type="number"
+												mv-default="1"
+												mv-mode="[if(edit,'edit','')]"></span>
 									x
-									<span property="reps" mv-editor-type="number"  mv-mode="edit"></span>
+									<span property="reps" mv-editor-type="number"
+												mv-default="1"
+												mv-mode="[if(edit,'edit','')]"></span>
 									@
-									<span property="weight" mv-editor-type="number"  mv-mode="edit"
-												mv-editor-step="5"></span>
+												<span property="weight" mv-editor-type="number"
+															mv-default="10"
+															mv-mode="[if(edit,'edit','')]"
+															mv-editor-step="5"></span>
 									<label>
 										<span class="status-[status]"></span>
 										<meta mv-mode="read" property="statusIndex" mv-default="0">
@@ -166,7 +181,7 @@
 										<span class="note-[note]"></span>
 										<input type="checkbox" style="display:none" property="note"></input>
 									</label>
-									<div mv-if="note" property="notes" mv-mode="edit"></div>
+									<div mv-if="note" property="notes" mv-mode="[if(edit,'edit','')]"></div>
 								</div>
 							</div>
 						</div>
