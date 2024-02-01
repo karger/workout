@@ -105,7 +105,7 @@
 						 mv-source-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
 						 >
 			<meta property="uid" mv-value="url('uid') || $user.info.uid">
-			<meta property="storage" mv-value="if(uid,'firebase://mavo-cd7c3/workout/' & uid,'none')">
+			<meta property="storage" mv-value="'firebase://mavo-cd7c3/workout/' & (uid||0)">
 		</section>
 		<section mv-app="workout" mv-plugins="firebase-firestore"
 						 mv-autosave="5"
@@ -120,8 +120,10 @@
 				<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
 				</div>
 			</div>
-			<h2 property="heading" mv-default="[$user.name]'s Workout" mv-storage="inherit"></h2>
-			<section id="picker"  class="hide-if-[uid != $user.info.uid]">
+			<h2 class="hide-if-[!config.uid]"
+					property="heading" mv-default="[$user.name]'s Workout"
+					mv-storage="inherit"></h2>
+			<section id="picker"  class="hide-if-[config.uid != $user.info.uid]">
 				<select property="newest" mv-storage="none">
 					<option selected value="">(choose session)</option>
 					<optgroup mv-list mv-value="unique(session.title)">
@@ -130,7 +132,7 @@
 				</select>
 				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)">Add</button>
 			</section>
-			<section class="timer hide-if-[uid != $user.info.uid]">
+			<section class="timer hide-if-[config.uid != $user.info.uid]">
 				<b>Timer:</b>
 				<span style="display:none">
 					<meta property="start">
@@ -142,7 +144,8 @@
 				<button mv-if="running" mv-action="set(start, 1*$now-duration*1000)">stop</button>
 				<span mv-if="running">[round(remaining/1000)]</span>
 			</section>
-			<section mv-list="session" mv-order="desc">
+			<section mv-list="session" mv-order="desc"
+							 class="hide-if-[!config.uid]">
 				<div mv-list-item>
 					<h3 class="title"><span property="title"></span>
 						<span property="date" mv-editor="#datepicker"
@@ -179,9 +182,11 @@
 									</label>
 									<label>
 										<span class="note-[note]"></span>
-										<input type="checkbox" style="display:none" property="note"></input>
+										<input type="checkbox" style="display:none"
+													 property="note"
+													 ></input>
 									</label>
-									<div mv-if="note" property="notes" mv-mode="[if(edit,'edit','')]"></div>
+									<div mv-if="note" property="notes" mv-mode="edit"></div>
 								</div>
 							</div>
 						</div>
