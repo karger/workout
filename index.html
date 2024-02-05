@@ -50,12 +50,12 @@
       :not(:focus-within) input[type="number"]::-webkit-inner-spin-button {
 					appearance: none;
 			}
-			[mv-editor-type="number"] {
+			[mv-mode="edit"] [mv-editor-type="number"] {
 					width: 5ex;
 					justify-self: end;
 			}
-			[mv-editor-type="number"] input.mv-editor.mv-editor[type="number"] {
-					min-width: 5ex;
+			[mv-mode="edit"]  [mv-editor-type="number"] input.mv-editor.mv-editor[type="number"] {
+					min-width: 6ex;
 			}
 			.note-false::after, .note-true::after {
 					content: '📝'
@@ -87,11 +87,15 @@
 					display: grid;
 					justify-items: end;
 					column-gap: 1em;
-					grid-template-columns: 1fr 2em 2ex 3em 2ex 3em 3em 3em
+					grid-template-columns: 1fr 2ex 1ex 2ex 1ex 3ex 3em 3em
+			}
+			[mv-mode="edit"] [mv-list="group"] > [mv-list-item] {
+					grid-template-columns: 1fr 3em 1ex 3em 1ex 3em 3em 3em
 			}
 			[property="notes"] {
+			    width: 20em;
 					grid-column-start: 2;
-					grid-column-end: 7;
+					grid-column-end: 9;
 			}
 		</style>
 	</head>
