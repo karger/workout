@@ -13,6 +13,9 @@
 							min-height: 1cm;
 							margin: 6px;
 					}
+					label {
+							min-height: 1cm;
+					}
 					[mv-list="group"] [mv-list-item] {
 							margin: 0.5rem;
 					}
@@ -61,7 +64,8 @@
 			.title {
 					display: grid;
 					column-gap: 2em;
-					grid-template-columns: 3fr 3fr 1fr 1fr;
+					grid-template-columns: 1fr 2fr;
+					justify-items: start;
 			}
 			.hide-if-true {
 					display: none;
@@ -72,10 +76,6 @@
 			}
 			[mv-app]:not([mv-mode="edit"]) .show-edit {
 					display: none;
-			}
-			[mv-mode="edit"] [mv-editor-type="number"] {
-					width: 5ex;
-					justify-self: end;
 			}
 			[mv-mode="edit"]  [mv-editor-type="number"] input.mv-editor.mv-editor[type="number"] {
 					min-width: 6ex;
@@ -99,26 +99,42 @@
 			.status-decrease::after {
 					content: '▼'
 			}
-			[mv-list="exercise"], [mv-list="group"] {
-					padding-left: 2em;
-			}
-			h4 {
-					margin-bottom: .5ex
-			}
-			[mv-list="group"] > [mv-list-item] {
+			[mv-list="exercise"] {
 					box-sizing: border-box;
 					display: grid;
-					justify-items: end;
+					justify-items: center;
+					align-items: baseline;
 					column-gap: 1em;
-					grid-template-columns: 1fr 2ex 1ex 2ex 1ex 3ex 3em 3em
+					grid-template-columns: max-content max-content 1em max-content 1fr max-content 1fr 1fr;
 			}
-			[mv-mode="edit"] [mv-list="group"] > [mv-list-item] {
-					grid-template-columns: 1fr 3em 1ex 3em 1ex 3em 3em 3em
+			[type="number"], [datatype="number"] {
+					justify-self: end;
+			}
+			.subtitle {
+					padding-left: 2em;
+					justify-self: end;
+			}
+			[mv-list="exercise"] > [mv-list-item], [mv-list="group"], [mv-list="group"] > [mv-list-item] {
+					display: contents;
+			}
+			[mv-mode="edit"] [mv-list="exercise"] {
+					grid-template-columns: 3fr max-content 1em max-content 1em max-content 1fr 1fr
+			}
+			[mv-list="exercise"], [mv-list="group"] {
+					padding-left: 1em;
+			}
+			h4 {
+					margin-bottom: .5ex;
+					grid-column: 1 / -1;
+					justify-self: start;
 			}
 			[property="notes"] {
 			    width: 20em;
-					grid-column-start: 2;
-					grid-column-end: 9;
+					padding-top: 1ex;
+					padding-bottom: 3ex;
+					justify-self: start;
+					grid-column: 2 / -1;
+					align-self: start;
 			}
 		</style>
 	</head>
@@ -193,13 +209,13 @@
 							<h4 property="title" mv-editor-placeholder="Exercise"></h4>
 							<div mv-list="group" mv-initial-items="1">
 								<div mv-list-item>
-									<span><span property="subtitle"></span></span>
+									<span class="subtitle"><span property="subtitle"></span></span> <!--wrapper in case empty-->
 									<span property="sets" mv-editor-type="number"
-												mv-default="1"
+												mv-default="1" 
 												mv-mode="[if(edit,'edit','')]"></span>
 									x
 									<span property="reps" mv-editor-type="number"
-												mv-default="1"
+												mv-default="1" 
 												mv-mode="[if(edit,'edit','')]"></span>
 									@
 									<span property="weight" mv-editor-type="number"
