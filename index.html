@@ -9,6 +9,9 @@
 		<script src="workout.js"></script>
 		<style>
 			@media (hover: none) {
+					body {
+							width: calc(100vw-16px)
+					}
 					button {
 							min-height: 1cm;
 							margin: 6px;
@@ -32,7 +35,9 @@
 			border-bottom: 3px solid black;
 			}
 			.timer-true {
-					background-color: rgb(200,100,100)
+					--timer-color: rgba(230,100,100,0.7);
+					background-image: conic-gradient(from 90deg at 0 0, var(--timer-color) var(--angle), transparent var(--angle), transparent 90deg);
+																																										 
 			}
 			.timer-false {
 					background-color: white;
@@ -64,7 +69,8 @@
 			.title {
 					display: grid;
 					column-gap: 2em;
-					grid-template-columns: 1fr 2fr;
+					align-items: center;
+					grid-template-columns: 1fr 2fr 2fr;
 					justify-items: start;
 			}
 			.hide-if-true {
@@ -129,8 +135,8 @@
 					justify-self: start;
 			}
 			[property="notes"] {
-			    width: 20em;
-					padding-top: 1ex;
+				padding-top: 1ex;
+				width: 100%;
 					padding-bottom: 3ex;
 					justify-self: start;
 					grid-column: 2 / -1;
@@ -155,7 +161,6 @@
 						 mv-storage="[config.storage]"
 						 mv-storage-options="auth"
 						 mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
-						 class="timer-[running]"
 						 >
 			<div class="hide-if-[url('debug')!=1]">
 				<input id="datepicker" type="date">
@@ -180,12 +185,15 @@
 				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)"
 								>Add</button>
 			</section>
-			<section class="timer timer-[running] hide-if-[config.uid != $user.info.uid]">
+			<section class="timer timer-[running] hide-if-[config.uid != $user.info.uid]"
+							 style="--angle: [round(90*timerFraction,1)]deg"
+							 ">
 				<b class="show-edit">Timer:</b>
 				<span style="display:none">
-					<meta property="start">
+					<meta property="start" mv-storage="none" mv-default="$startup-duration*1000">
 					<meta property="remaining" mv-value="start+duration*1000-$now">
 					<meta property="running" mv-value="remaining > 0">
+					<meta property="timerFraction" mv-value="if(running,0.001*remaining/duration,0)">
 				</span>
  				<span class="show-edit" property="duration" mv-default="30"></span>
 				<button mv-if="not(running)" mv-action="set(start, 1*$now)">start [duration]s</button>
@@ -198,11 +206,8 @@
 					<h3 class="title"><span property="title"></span>
 						<span property="date" mv-editor="#datepicker"
 									mv-default="[$today]"></span>
-						<span></span>
+						<button style="justify-self: end" mv-if="$index=0 && (now-date < 24*60*60*1000)" mv-action="delete($item)">X</button>
 						<meta property="edit" mv-value="$today < date+1000*60*60*24">
-						<button mv-if="$index=0 && (now-date < 24*60*60*1000)" mv-action="delete($item)">X</button>
-
-						<!--<button mv-action="add($item, session, $index), set(statusIndex,0), set(date, $today), move($item,0)">⟳</button>-->
 					</h3>
 					<div mv-list="exercise">
 						<div mv-list-item>
