@@ -27,20 +27,15 @@
 					width: .8em;
 					vertical-align: middle;
 			}
+			button {
+					border-radius: 10px;
+			}
 			section {
 					max-width: 90ex;
 			}
 			[mv-list="session"] > [mv-list-item]:not(:last-child) {
 			padding-bottom: 5em;
 			border-bottom: 3px solid black;
-			}
-			.timer-true {
-					--timer-color: rgba(230,100,100,0.7);
-					background-image: conic-gradient(from 90deg at 0 0, var(--timer-color) var(--angle), transparent var(--angle), transparent 90deg);
-																																										 
-			}
-			.timer-false {
-					background-color: white;
 			}
 			#spacer {
 					position: fixed;
@@ -57,20 +52,25 @@
 					padding-top: .5em;
 					padding-bottom: 1em;
 			}
-			button {
-					border-radius: 10px;
+			.timer-true {
+					--timer-color: rgba(230,100,100,0.7);
+					background-image: conic-gradient(from 90deg at 0 0, var(--timer-color) var(--angle), transparent var(--angle), transparent 90deg);
+																																										 
 			}
-			.time span {
-					float: right;
+			.timer-false {
+					background-color: white;
 			}
 			.timer button {
 					min-height: 1cm;
+			}
+			.time span {
+					float: right;
 			}
 			.title {
 					display: grid;
 					column-gap: 2em;
 					align-items: center;
-					grid-template-columns: 1fr 2fr 2fr;
+					grid-template-columns: 1fr 2fr;
 					justify-items: start;
 			}
 			.hide-if-true {
@@ -182,7 +182,7 @@
 						<option mv-list-item></option>
 					</optgroup>
 				</select>
-				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex,0)"
+				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex where statusIndex=1,0)"
 								>Add</button>
 			</section>
 			<section class="timer timer-[running] hide-if-[config.uid != $user.info.uid]"
