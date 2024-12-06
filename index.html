@@ -1,258 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width">
-		<title>Workout Tracker</title>
-		<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
-		<script src="https://get.mavo.io/mavo.es5.js"></script>
-		<script src="workout.js"></script>
-		<style>
-			@media (hover: none) {
-					body {
-							width: calc(100vw-16px)
-					}
-					button {
-							min-height: 1cm;
-							margin: 6px;
-					}
-					label {
-							min-height: 1cm;
-					}
-					[mv-list="group"] [mv-list-item] {
-							margin: 0.5rem;
-					}
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Workout Tracker</title>
+	<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
+	<script src="https://get.mavo.io/mavo.es5.js"></script>
+	<script src="workout.js"></script>
+	<style>
+		@media (hover: none) {
+			body {
+				width: calc(100vw-16px)
 			}
+
 			button {
-					border-radius: 10px;
+				min-height: 1cm;
+				margin: 6px;
 			}
-			section {
-					max-width: 90ex;
+
+			label {
+				min-height: 1cm;
 			}
-			[mv-list="session"] > [mv-list-item]:not(:last-child) {
+
+			[mv-list="group"] [mv-list-item] {
+				margin: 0.5rem;
+			}
+		}
+
+		button {
+			border-radius: 10px;
+		}
+
+		section {
+			max-width: 90ex;
+		}
+
+		[mv-list="session"]>[mv-list-item]:not(:last-child) {
 			padding-bottom: 5em;
 			border-bottom: 3px solid black;
-			}
-			#spacer {
-					position: fixed;
-					top: 0;
-					height: 3rem;
-					width: 100%;
-					background-color: white;
-					z-index: 1;
-			}
-			.timer {
-					position: sticky;
-					top: calc(1.5rem + 1.5em);
-					z-index: 2;
-					padding-top: .5em;
-					padding-bottom: 1em;
-			}
-			.timer-true {
-					--timer-color: rgba(230,100,100,0.7);
-					background-image: conic-gradient(from 90deg at 0 0, var(--timer-color) var(--angle), transparent var(--angle), transparent 90deg);
-																																										 
-			}
-			.timer-false {
-					background-color: white;
-			}
-			.timer button {
-					min-height: 1cm;
-			}
-			.title {
-					display: grid;
-					column-gap: 2em;
-					align-items: center;
-					grid-template-columns: 1fr 2fr;
-					justify-items: start;
-			}
-			.hide-if-true {
-					display: none;
-			}
-			:not(:focus-within) input[type="number"]::-webkit-outer-spin-button, 
-      :not(:focus-within) input[type="number"]::-webkit-inner-spin-button {
-					appearance: none;
-			}
-			[mv-app]:not([mv-mode="edit"]) .show-edit {
-					display: none;
-			}
-			[mv-mode="edit"]  [mv-editor-type="number"] input.mv-editor.mv-editor[type="number"] {
-					min-width: 6ex;
-			}
-			.note-false::after, .note-true::after {
-					content: '📝'
-			}
-			.note-false::after {
-					color: grey;
-					filter: grayscale(100%);
-			}
-			.status-todo::after {
-					content: '🔲'
-			}
-			.status-done::after {
-					content: '✔️'
-			}
-			.status-increase::after {
-					content: '▲'
-			}
-			.status-decrease::after {
-					content: '▼'
-			}
-			[mv-list="exercise"] {
-					box-sizing: border-box;
-					display: grid;
-					justify-items: center;
-					align-items: baseline;
-					column-gap: 1em;
-					grid-template-columns: max-content max-content 1em max-content 1fr max-content 1fr 1fr max-content;
-			}
-			[type="number"], [datatype="number"] {
-					justify-self: end;
-			}
-			.subtitle {
-					padding-left: 2em;
+		}
+
+		#spacer {
+			position: fixed;
+			top: 0;
+			height: 3rem;
+			width: 100%;
+			background-color: white;
+			z-index: 1;
+		}
+
+		.timer {
+			position: sticky;
+			top: calc(1.5rem + 1.5em);
+			z-index: 2;
+			padding-top: .5em;
+			padding-bottom: 1em;
+		}
+
+		.timer-true {
+			--timer-color: rgba(230, 100, 100, 0.7);
+			background-image: conic-gradient(from 90deg at 0 0, var(--timer-color) var(--angle), transparent var(--angle), transparent 90deg);
+
+		}
+
+		.timer-false {
+			background-color: white;
+		}
+
+		.timer button {
+			min-height: 1cm;
+		}
+
+		.title {
+			display: grid;
+			column-gap: 2em;
+			align-items: center;
+			grid-template-columns: 1fr 2fr 4em;
+			justify-items: start;
+		}
+
+		.hide-if-true {
+			display: none;
+		}
+
+		:not(:focus-within) input[type="number"]::-webkit-outer-spin-button,
+		:not(:focus-within) input[type="number"]::-webkit-inner-spin-button {
+			appearance: none;
+		}
+
+		[mv-app]:not([mv-mode="edit"]) .show-edit {
+			display: none;
+		}
+
+		[mv-mode="edit"] [mv-editor-type="number"] input.mv-editor.mv-editor[type="number"] {
+			min-width: 6ex;
+		}
+
+		.note-false::after,
+		.note-true::after {
+			content: '📝'
+		}
+
+		.note-false::after {
+			color: grey;
+			filter: grayscale(100%);
+		}
+
+		.status-todo::after {
+			content: '🔲'
+		}
+
+		.status-done::after {
+			content: '✔️'
+		}
+
+		.status-increase::after {
+			content: '▲'
+		}
+
+		.status-decrease::after {
+			content: '▼'
+		}
+
+		[mv-list="exercise"] {
+			box-sizing: border-box;
+			display: grid;
+			justify-items: center;
+			align-items: baseline;
+			column-gap: 1em;
+			grid-template-columns: max-content max-content 1em max-content 1fr max-content 1fr 1fr max-content;
+		}
+
+		[type="number"],
+		[datatype="number"] {
+			justify-self: end;
+		}
+
+		.subtitle {
+			padding-left: 2em;
 			justify-self: end;
 			grid-column: 1
-			}
-			[mv-list="exercise"] > [mv-list-item], [mv-list="group"], [mv-list="group"] > [mv-list-item] {
-					display: contents;
-			}
-			[mv-mode="edit"] [mv-list="exercise"] {
-					grid-template-columns: 3fr max-content 1em max-content 1em max-content 1fr 1fr max-content;
-			}
-			[mv-list="exercise"], [mv-list="group"] {
-					padding-left: 1em;
-			}
-			h4 {
-					margin-bottom: .5ex;
-					grid-column: 1 / -1;
-					justify-self: start;
-			}
-			[property="notes"] {
-				padding-top: 1ex;
-				width: 100%;
-					padding-bottom: 3ex;
-					justify-self: start;
-					grid-column: 2 / -1;
-					align-self: start;
-			}
-			[mv-app]:not([mv-mode="edit"]) .delete-button {
-				display: none;
-			}
-			.mv-add-exercise {
-				margin-top: 1em;
-				grid-column: 1;
-			}
-			.share-button {
-					width: 1em;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="spacer"></div>
-		<section mv-app="config"
-						 mv-bar="none"
-						 mv-plugins="firebase-firestore share"
-						 mv-source="firebase://mavo-cd7c3/workout/0"
-						 mv-source-options="auth"
-						 mv-source-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
-						 >
-			<meta property="uid" mv-value="url('uid') || $user.info.uid">
-			<meta property="storage" mv-value="'firebase://mavo-cd7c3/workout/' & (uid||0)">
-		</section>
-		<section mv-app="workout" mv-plugins="firebase-firestore"
-						 mv-autosave="5"
-						 mv-storage="[config.storage]"
-						 mv-storage-options="auth"
-						 mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I"
-						 >
-			<div class="hide-if-[url('debug')!=1]">
-				<input id="datepicker" type="date">
-				<input id="countpicker" type="number">
-				<input id="weightpicker" type="number" step="5">
-				<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
-				</div>
+		}
+
+		[mv-list="exercise"]>[mv-list-item],
+		[mv-list="group"],
+		[mv-list="group"]>[mv-list-item] {
+			display: contents;
+		}
+
+		[mv-mode="edit"] [mv-list="exercise"] {
+			grid-template-columns: 3fr max-content 1em max-content 1em max-content 1fr 1fr max-content;
+		}
+
+		[mv-list="exercise"],
+		[mv-list="group"] {
+			padding-left: 1em;
+		}
+
+		h4 {
+			margin-bottom: .5ex;
+			grid-column: 1 / -1;
+			justify-self: start;
+		}
+
+		[property="notes"] {
+			padding-top: 1ex;
+			width: 100%;
+			padding-bottom: 3ex;
+			justify-self: start;
+			grid-column: 2 / -1;
+			align-self: start;
+		}
+
+		[mv-app]:not([mv-mode="edit"]) .delete-button {
+			display: none;
+		}
+
+		.mv-add-exercise {
+			margin-top: 1em;
+			grid-column: 1;
+		}
+
+		.share-button {
+			width: 1em;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="spacer"></div>
+	<section mv-app="config" mv-bar="none" mv-plugins="firebase-firestore share"
+		mv-source="firebase://mavo-cd7c3/workout/0" mv-source-options="auth"
+		mv-source-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I">
+		<meta property="uid" mv-value="url('uid') || $user.info.uid">
+		<meta property="storage" mv-value="'firebase://mavo-cd7c3/workout/' & (uid||0)">
+	</section>
+	<section mv-app="workout" mv-plugins="firebase-firestore" mv-autosave="5" mv-storage="[config.storage]"
+		mv-storage-options="auth" mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I">
+		<div class="hide-if-[url('debug')!=1]">
+			<input id="datepicker" type="date">
+			<input id="countpicker" type="number">
+			<input id="weightpicker" type="number" step="5">
+			<div mv-list property="statusList" mv-value="list('todo','done','increase','decrease')">
 			</div>
-			<h2>
-				<span class="hide-if-[!config.uid]"
-							property="heading" mv-default="My Workout"
-							mv-storage="inherit">
-				</span>
-			</h2>
-			<section id="picker"  class="hide-if-[config.uid != $user.info.uid]">
-				<select property="newest" mv-storage="none">
-					<option selected value="">(choose session)</option>
-					<optgroup mv-list mv-value="unique(session.title)">
-						<option mv-list-item></option>
-					</optgroup>
-				</select>
-				<button disabled="[newest=='']" mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex where statusIndex=1,0)"
-								>Add</button>
-			</section>
-			<section class="timer timer-[running] hide-if-[config.uid != $user.info.uid]"
-							 style="--angle: [round(90*timerFraction,1)]deg"
-							 >
-				<b class="show-edit">Timer:</b>
-				<span style="display:none">
-					<meta property="start" mv-storage="none" mv-default="$startup-duration*1000">
-					<meta property="remaining" mv-value="start+duration*1000-$now">
-					<meta property="running" mv-value="remaining > 0">
-					<meta property="timerFraction" mv-value="if(running,0.001*remaining/duration,0)">
-				</span>
- 				<span class="show-edit" property="duration" mv-default="30"></span>
-				<button mv-if="not(running)" mv-action="set(start, 1*$now)">start [duration]s</button>
-				<button mv-if="running" mv-action="set(start, 1*$now-duration*1000)">stop</button>
-				<span mv-if="running">[round(remaining/1000)]</span>
-			</section>
-			<section mv-list="session" mv-order="desc"
-							 class="hide-if-[!config.uid]">
-				<div mv-list-item>
-					<h3 class="title"><span property="title"></span>
-						<span property="date" mv-editor="#datepicker"
-									mv-default="[$today]"></span>
-						<button style="justify-self: end" mv-if="$index=0 && (now-date < 24*60*60*1000)" mv-action="delete($item)">X</button>
-						<meta property="edit" mv-value="$today < date+1000*60*60*24">
-					</h3>
-					<div mv-list="exercise">
-						<div mv-list-item>
-							<h4><button class="delete-button"
-													mv-action="delete($this)">X</button>
-								<span property="title" mv-editor-placeholder="Exercise"></span></h4>
-							<div mv-list="group" mv-initial-items="1">
-								<div mv-list-item>
-									<span class="subtitle"><span property="subtitle"></span></span> <!--wrapper in case empty-->
-									<span property="sets" mv-editor-type="number"
-												mv-default="1" 
-												mv-mode="[if(edit,'edit','')]"></span>
-									x
-									<span property="reps" mv-editor-type="number"
-												mv-default="1" 
-												mv-mode="[if(edit,'edit','')]"></span>
-									@
-									<span property="weight" mv-editor-type="number"
-												mv-default="10"
-												mv-mode="[if(edit,'edit','')]"
-												mv-editor-step="5"></span>
-									<label>
-										<span class="status-[status]"></span>
-										<meta mv-mode="read" property="statusIndex" mv-default="0">
-										<meta mv-mode="read" property="status" mv-value="get(statusList,statusIndex)">
-										<button style="display:none" mv-action="set(statusIndex,(1+statusIndex) mod count(statusList))"></button>
-									</label>
+		</div>
+		<h2>
+			<span class="hide-if-[!config.uid]" property="heading" mv-default="My Workout" mv-storage="inherit">
+			</span>
+			<button mv-action="share(url:url() & '?uid=' & $user.info.uid, title: $user.name & ' Workout')"><img
+					class="share-button" src="share.png"></button>
+		</h2>
+		<section id="picker" class="hide-if-[config.uid != $user.info.uid]">
+			<select property="newest" mv-storage="none">
+				<option selected value="">(choose session)</option>
+				<optgroup mv-list mv-value="unique(session.title)">
+					<option mv-list-item></option>
+				</optgroup>
+			</select>
+			<button disabled="[newest=='']"
+				mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex where statusIndex=1,0)">Add</button>
+		</section>
+		<section class="timer timer-[running] hide-if-[config.uid != $user.info.uid]"
+			style="--angle: [round(90*timerFraction,1)]deg">
+			<b class="show-edit">Timer:</b>
+			<span style="display:none">
+				<meta property="start" mv-storage="none" mv-default="$startup-duration*1000">
+				<meta property="remaining" mv-value="start+duration*1000-$now">
+				<meta property="running" mv-value="remaining > 0">
+				<meta property="timerFraction" mv-value="if(running,0.001*remaining/duration,0)">
+			</span>
+			<span class="show-edit" property="duration" mv-default="30"></span>
+			<button mv-if="not(running)" mv-action="set(start, 1*$now)">start [duration]s</button>
+			<button mv-if="running" mv-action="set(start, 1*$now-duration*1000)">stop</button>
+			<span mv-if="running">[round(remaining/1000)]</span>
+		</section>
+		<section mv-list="session" mv-order="desc" class="hide-if-[!config.uid]">
+			<div mv-list-item>
+				<h3 class="title">
+					<span property="title"></span>
+					<span property="date" mv-editor="#datepicker" mv-default="[$today]"></span>
+					<button style="justify-self: end" mv-if="$index=0 && edit" mv-action="delete($item)">X</button>
+					<meta property="edit" mv-value="$today < date+1000*60*60*24">
+				</h3>
+				<div mv-list="exercise">
+					<div mv-list-item>
+						<h4><button class="delete-button" mv-action="delete($this)">X</button>
+							<span property="title" mv-editor-placeholder="Exercise"></span>
+						</h4>
+						<div mv-list="group" mv-initial-items="1">
+							<div mv-list-item>
+								<span class="subtitle"><span property="subtitle"></span></span>
+								<!--wrapper in case empty-->
+								<span property="sets" mv-editor-type="number" mv-default="1"
+									mv-mode="[if(edit,'edit','')]"></span>
+								x
+								<span property="reps" mv-editor-type="number" mv-default="1"
+									mv-mode="[if(edit,'edit','')]"></span>
+								<span>
+									<span class="[if(!weight,'show-edit')]">@</span>
+								</span>
+								<span>
+									<span property="weight" mv-editor-type="number" mv-default="10"
+										class="[if(!weight,'show-edit')]" mv-mode="[if(edit,'edit','')]"
+										mv-editor-step="5"></span>
+								</span>
+								<label>
+									<span class="status-[status]"></span>
+									<meta mv-mode="read" property="statusIndex" mv-default="0">
+									<meta mv-mode="read" property="status" mv-value="get(statusList,statusIndex)">
+									<button style="display:none"
+										mv-action="set(statusIndex,(1+statusIndex) mod count(statusList))"></button>
+								</label>
+								<span>
+									<a property="video">🎞️</a>
 									<label>
 										<span class="note-[note]"></span>
-										<input type="checkbox" style="display:none"
-													 property="note"
-													 ></input>
+										<input type="checkbox" style="display:none" property="note"></input>
 									</label>
-									<button class="delete-button" mv-action="delete($this)">X</button>
-									<div mv-if="note" property="notes" mv-mode="edit"></div>
-								</div>
+								</span>
+								<button class="delete-button" mv-action="delete($this)">X</button>
+								<div mv-if="note" property="notes" mv-mode="edit"></div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</section>
+			</div>
 		</section>
-	</body>
+	</section>
+</body>
+
 </html>
