@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width">
 	<title>Workout Tracker</title>
 	<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
-	<script src="https://get.mavo.io/mavo.es5.js"></script>
+	<script src="https://get.mavo.io/mavo.js"></script>
 	<script src="workout.js"></script>
 	<style>
 		@media (hover: none) {
@@ -32,6 +32,7 @@
 			border-radius: 10px;
 		}
 
+		main,
 		section {
 			max-width: 90ex;
 		}
@@ -39,6 +40,14 @@
 		[mv-list="session"]>[mv-list-item]:not(:last-child) {
 			padding-bottom: 5em;
 			border-bottom: 3px solid black;
+		}
+
+		[mv-app]:not([mv-mode="edit"]) .todo-true {
+			display: none;
+		}
+
+		.todo-true .todo-button {
+			background-color: lightgreen;
 		}
 
 		#spacer {
@@ -177,6 +186,10 @@
 			display: none;
 		}
 
+		[mv-app]:not([mv-mode="edit"]) .mv-move {
+			display: none;
+		}
+
 		.mv-add-exercise {
 			margin-top: 1em;
 			grid-column: 1;
@@ -196,7 +209,8 @@
 		<meta property="uid" mv-value="url('uid') || $user.info.uid">
 		<meta property="storage" mv-value="'firebase://mavo-cd7c3/workout/' & (uid||0)">
 	</section>
-	<section mv-app="workout" mv-plugins="firebase-firestore" mv-autosave="5" mv-storage="[config.storage]"
+
+	<main mv-app="workout" mv-plugins="firebase-firestore share" mv-autosave="5" mv-storage="[config.storage]"
 		mv-storage-options="auth" mv-storage-key="AIzaSyC0PxY82lVLTLv80ZU1z5sz1azoYZits0I">
 		<div class="hide-if-[url('debug')!=1]">
 			<input id="datepicker" type="date">
@@ -209,8 +223,10 @@
 			<span class="hide-if-[!config.uid]" property="heading" mv-default="My Workout" mv-storage="inherit">
 			</span>
 			<button mv-action="share(url:url() & '?uid=' & $user.info.uid, title: $user.name & ' Workout')"><img
-					class="share-button" src="share.png"></button>
+					class="share-button" src="share.png" width="16" height="16"></button>
 		</h2>
+
+		<!--choose a session-->
 		<section id="picker" class="hide-if-[config.uid != $user.info.uid]">
 			<select property="newest" mv-storage="none">
 				<option selected value="">(choose session)</option>
@@ -219,8 +235,9 @@
 				</optgroup>
 			</select>
 			<button disabled="[newest=='']"
-				mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex where statusIndex=1,0)">Add</button>
+				mv-action="add(first(session where title=newest),session), set(first(session).date,$today),set(first(session).statusIndex where statusIndex=1,0),set(first(session).todo,false)">Add</button>
 		</section>
+
 		<section class="timer timer-[running] hide-if-[config.uid != $user.info.uid]"
 			style="--angle: [round(90*timerFraction,1)]deg">
 			<b class="show-edit">Timer:</b>
@@ -235,34 +252,42 @@
 			<button mv-if="running" mv-action="set(start, 1*$now-duration*1000)">stop</button>
 			<span mv-if="running">[round(remaining/1000)]</span>
 		</section>
+
 		<section mv-list="session" mv-order="desc" class="hide-if-[!config.uid]">
-			<div mv-list-item>
+			<div mv-list-item class="todo-[todo]">
 				<h3 class="title">
 					<span property="title"></span>
-					<span property="date" mv-editor="#datepicker" mv-default="[$today]"></span>
+					<span>
+						<span property="date" mv-editor="#datepicker" mv-default="[$today]"></span>
+						<label class="todo-control">
+							<input property="todo" type="checkbox" style="display:none">
+							<button class="todo-button" mv-action="set(todo,not(todo))">Todo</button>
+						</label>
+					</span>
 					<button style="justify-self: end" mv-if="$index=0 && edit" mv-action="delete($item)">X</button>
-					<meta property="edit" mv-value="$today < date+1000*60*60*24">
+					<meta property="editRecent" mv-value="if($today < date+1000*60*60*24,'edit','')">
 				</h3>
 				<div mv-list="exercise">
 					<div mv-list-item>
 						<h4><button class="delete-button" mv-action="delete($this)">X</button>
-							<span property="title" mv-editor-placeholder="Exercise"></span>
+							<button class="mv-move mv-drag-handle">≡</button>
+							<span property="title" mv-editor-placeholder="Exercise">
 						</h4>
 						<div mv-list="group" mv-initial-items="1">
 							<div mv-list-item>
 								<span class="subtitle"><span property="subtitle"></span></span>
 								<!--wrapper in case empty-->
 								<span property="sets" mv-editor-type="number" mv-default="1"
-									mv-mode="[if(edit,'edit','')]"></span>
+									mv-mode="[editRecent]"></span>
 								x
 								<span property="reps" mv-editor-type="number" mv-default="1"
-									mv-mode="[if(edit,'edit','')]"></span>
+									mv-mode="[editRecent]"></span>
 								<span>
 									<span class="[if(!weight,'show-edit')]">@</span>
 								</span>
 								<span>
 									<span property="weight" mv-editor-type="number" mv-default="10"
-										class="[if(!weight,'show-edit')]" mv-mode="[if(edit,'edit','')]"
+										class="[if(!weight,'show-edit')]" mv-mode="[editRecent]"
 										mv-editor-step="5"></span>
 								</span>
 								<label>
@@ -287,7 +312,7 @@
 				</div>
 			</div>
 		</section>
-	</section>
+	</main>
 </body>
 
 </html>
